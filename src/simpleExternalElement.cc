@@ -1,6 +1,9 @@
 
 #include <sst/core/sst_config.h>
+#include <sst/core/interfaces/stringEvent.h>
 #include "simpleExternalElement.h"
+
+using SST::Interfaces::StringEvent;
 
 SimpleExternalElement::SimpleExternalElement( SST::ComponentId_t id, SST::Params& params ) :
 	SST::Component(id), repeats(0) {
@@ -18,11 +21,17 @@ SimpleExternalElement::SimpleExternalElement( SST::ComponentId_t id, SST::Params
 		static_cast<uint64_t>(maxRepeats), static_cast<uint64_t>(printFreq));
 
 	// Just register a plain clock for this simple example
-    	registerClock("100MHz", new SST::Clock::Handler<SimpleExternalElement>(this, &SimpleExternalElement::clockTick));
+    registerClock("100MHz", new SST::Clock::Handler<SimpleExternalElement>(this, &SimpleExternalElement::clockTick));
+    // Configure our port
+    port = configureLink("port",
+            new SST::Event::Handler<SimpleExternalElement>(this, &SimpleExternalElement::handleEvent));
+    if ( !port ) {
+        output.fatal(CALL_INFO, -1, "Failed to configure port 'port'\n");
+    }
 
 	// Tell SST to wait until we authorize it to exit
-    	registerAsPrimaryComponent();
-    	primaryComponentDoNotEndSim();
+    registerAsPrimaryComponent();
+    primaryComponentDoNotEndSim();
 }
 
 SimpleExternalElement::~SimpleExternalElement() {
@@ -45,10 +54,20 @@ bool SimpleExternalElement::clockTick( SST::Cycle_t currentCycle ) {
 
 	repeats++;
 
+    port->send(new StringEvent(getName() + " Hello #" + std::to_string(repeats)));
+
 	if( repeats == maxRepeats ) {
 		primaryComponentOKToEndSim();
 		return true;
 	} else {
 		return false;
 	}
+}
+
+void SimpleExternalElement::handleEvent(SST::Event *ev) {
+    StringEvent *se = dynamic_cast<StringEvent*>(ev);
+    if ( se != NULL ) {
+        output.output("%s recevied an event: \"%s\"\n", getName().c_str(), se->getString().c_str());
+    }
+    delete ev;
 }

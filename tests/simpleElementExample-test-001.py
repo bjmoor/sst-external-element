@@ -1,8 +1,15 @@
 import sst
 
-obj = sst.Component("simpleExternalElement", "simpleExternalElement.SimpleExternalElement")
-obj.addParams({
+obj0 = sst.Component("simpleExternalElement0", "simpleExternalElement.SimpleExternalElement")
+obj0.addParams({
     "printFrequency" : "5",
     "repeats" : "15"
     })
 
+obj1 = sst.Component("simpleExternalElement1", "simpleExternalElement.SimpleExternalElement")
+obj1.addParams({
+    "printFrequency" : "5",
+    "repeats" : "10"
+    })
+
+sst.Link("MyLink").connect( (obj0, "port", "15ns"), (obj1, "port", "15ns") )
