@@ -6,11 +6,11 @@
 #include <sst/core/link.h>
 #include <sst/core/elementinfo.h>
 
-class SimpleExternalElement : public SST::Component {
+class SimpleExternalElement1 : public SST::Component {
 
 public:
-	SimpleExternalElement( SST::ComponentId_t id, SST::Params& params );
-	~SimpleExternalElement();
+	SimpleExternalElement1( SST::ComponentId_t id, SST::Params& params );
+	~SimpleExternalElement1();
 
 	void setup();
 	void finish();
@@ -20,9 +20,9 @@ public:
     void handleEvent(SST::Event *ev);
 
 	SST_ELI_REGISTER_COMPONENT(
-		SimpleExternalElement,
+		SimpleExternalElement1,
 		"simpleExternalElement",
-		"SimpleExternalElement",
+		"SimpleExternalElement1",
 		SST_ELI_ELEMENT_VERSION( 1, 0, 0 ),
 		"Demonstration of an External Element for SST",
 		COMPONENT_CATEGORY_PROCESSOR

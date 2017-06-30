@@ -1,12 +1,12 @@
 import sst
 
-obj0 = sst.Component("simpleExternalElement0", "simpleExternalElement.SimpleExternalElement")
+obj0 = sst.Component("simpleExternalElement0", "simpleExternalElement.SimpleExternalElement0")
 obj0.addParams({
     "printFrequency" : "5",
     "repeats" : "15"
     })
 
-obj1 = sst.Component("simpleExternalElement1", "simpleExternalElement.SimpleExternalElement")
+obj1 = sst.Component("simpleExternalElement1", "simpleExternalElement.SimpleExternalElement1")
 obj1.addParams({
     "printFrequency" : "5",
     "repeats" : "10"
